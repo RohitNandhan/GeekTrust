@@ -1,13 +1,10 @@
 package com.geektrust.backend.entites;
 
 import java.util.List;
-import java.util.Map;
 
 public class Metro {
-    private MetroStation metroStation;
-    private List<MetroCard> metroCardList;
-//    private Map<String,JourneyType> journeyTypeMap;
-
+    private final MetroStation metroStation;
+    private final List<MetroCard> metroCardList;
     public Metro(MetroStation metroStation, List<MetroCard> metroCardList) {
         this.metroStation = metroStation;
         this.metroCardList = metroCardList;

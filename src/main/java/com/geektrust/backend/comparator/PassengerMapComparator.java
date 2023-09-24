@@ -9,7 +9,7 @@ public class PassengerMapComparator implements Comparator<Map.Entry<PassengerTyp
 
     @Override
     public int compare(Map.Entry<PassengerType, Integer> o1, Map.Entry<PassengerType, Integer> o2) {
-        int valueComparison = o1.getValue().compareTo(o2.getValue());
+        int valueComparison = o2.getValue().compareTo(o1.getValue());
         // If values are equal, compare by keys
         if (valueComparison == 0) {
             return o1.getKey().name().compareTo(o2.getKey().name());

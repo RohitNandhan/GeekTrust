@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface IMetroService {
 
-    public void checkInService(String cardId, String passengerType,String fromStation);
-
+     void checkInService(String cardId, String passengerType,String fromStation);
     List<MetroSummaryDTO> printSummary();
 }

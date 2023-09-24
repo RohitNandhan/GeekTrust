@@ -3,7 +3,7 @@ package com.geektrust.backend.services;
 import com.geektrust.backend.repositories.IMetroCardRepository;
 
 public class MetroCardService implements IMetroCardService{
-    private IMetroCardRepository metroCardRepository;
+    private final IMetroCardRepository metroCardRepository;
 
     public MetroCardService(IMetroCardRepository metroCardRepository) {
         this.metroCardRepository = metroCardRepository;

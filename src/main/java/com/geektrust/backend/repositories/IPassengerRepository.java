@@ -1,6 +1,5 @@
 package com.geektrust.backend.repositories;
 
-import com.geektrust.backend.entites.Passenger;
 import com.geektrust.backend.entites.PassengerType;
 import com.geektrust.backend.entites.Station;
 

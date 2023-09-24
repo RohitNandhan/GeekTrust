@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class MetroRepository implements IMetroRepository{
 
-    private Map<Station, Metro> metroMap;
+    private final Map<Station, Metro> metroMap;
 
     public MetroRepository() {
         this.metroMap = new HashMap<>();
@@ -33,17 +33,15 @@ public class MetroRepository implements IMetroRepository{
         getMetroStation(fromStation).addPassenger(passengerType);
     }
     @Override
-    public List<Metro> getMetrolist(){
+    public List<Metro> getMetroList(){
         return metroMap.values().stream().collect(Collectors.toList());
     }
-//    @Override
-//    public Station getStation(Station station){
-//
-//    }
+
     @Override
     public MetroCard getMetroCardById(Station station, String cardId){
         return getMetro(station).getCardById(cardId);
     }
+
     @Override
     public JourneyType getJourneyType(Station station, String cardId){
         return getMetroCardById(station,cardId).getJourneyType();
@@ -53,19 +51,14 @@ public class MetroRepository implements IMetroRepository{
     public void setJourneyType(Station fromStation, String cardId) {
             getMetroCardById(fromStation,cardId).toggleJourneyType();
     }
-//    @Override
-//    public void setJourneyType(Station fromStation,String cardId){
-//        getMetroStation(fromStation).setJourneyType(cardId);
-//    }
 
     @Override
     public void addCollectedAmount(Station fromStation, Integer amount){
-
         getMetroStation(fromStation).addAmount(amount);
     }
+
     @Override
     public void addDiscountAmount(Station fromStation, Integer amount){
-
         getMetroStation(fromStation).addDiscountAmount(amount);
     }
 

@@ -2,7 +2,6 @@ package com.geektrust.backend.entites;
 
 public class MetroCard {
     private final String cardId;
-    //private Passenger passenger;
     private Integer balance;
     private JourneyType journeyType;
 
@@ -12,17 +11,6 @@ public class MetroCard {
       journeyType=JourneyType.SINGLE;
   }
 
-
-//    public void toggleJourneyType() {
-//      if(journeyType==null) this.journeyType=JourneyType.SINGLE;
-//      else if(journeyType.equals(JourneyType.SINGLE))
-//        this.journeyType = JourneyType.RETURN;
-//      else if(journeyType.equals(JourneyType.RETURN)) {
-//          this.journeyType=JourneyType.SINGLE;
-//      }else {
-//          this.journeyType=JourneyType.SINGLE;
-//      }
-//    }
     public void toggleJourneyType() {
         if (journeyType == JourneyType.SINGLE) {
             journeyType = JourneyType.RETURN;
@@ -42,7 +30,6 @@ public class MetroCard {
     public Integer getBalance() {
         return balance;
     }
-
 
     public void addBalance(Integer balance){
       this.balance+=balance;

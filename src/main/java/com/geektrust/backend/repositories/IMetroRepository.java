@@ -15,7 +15,7 @@ public interface IMetroRepository {
 
     void addPassenger(Station fromStation, PassengerType passengerType);
 
-    List<Metro> getMetrolist();
+    List<Metro> getMetroList();
 
     MetroCard getMetroCardById(Station station, String cardId);
 

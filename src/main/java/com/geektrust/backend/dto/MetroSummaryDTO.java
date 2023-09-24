@@ -47,15 +47,7 @@ public class MetroSummaryDTO {
                         .append(discount).append("\n");
 
             List<Map.Entry<PassengerType, Integer>> sortPassengerTypes = new ArrayList<>(passengerTypemap.entrySet());
-//            sortedPassengerTypes.sort((entry1, entry2) -> {
-//                int countComparison = entry2.getValue().compareTo(entry1.getValue());
-//                if (countComparison == 0) {
-//                    // If counts are the same, sort by passenger type in ascending order
-//
-//                    return entry1.getKey().name().compareTo(entry2.getKey().name());
-//                }
-//                return countComparison;
-//            });
+
             PassengerMapComparator passengerMapComparator=new PassengerMapComparator();
             Collections.sort(sortPassengerTypes,passengerMapComparator);
 

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MetroStation {
-    private Station station;
+    private final Station station;
     private Integer totalAmountCollected=0;
     private Map<Station,Integer> amountcollectedMap;
     //private Map<String,JourneyType> journeyTypeMap;
@@ -30,29 +30,12 @@ public class MetroStation {
             passengerMap.put(passengerType,1);
         }
     }
-//    public void setJourneyType(String cardId){
-//        if(journeyTypeMap.containsKey(cardId)){
-//            if(journeyTypeMap.get(cardId).equals(JourneyType.SINGLE))
-//                journeyTypeMap.put(cardId,JourneyType.RETURN);
-//            else if(journeyTypeMap.get(cardId).equals(JourneyType.RETURN)) {
-//                journeyTypeMap.put(cardId,JourneyType.SINGLE);
-//            }
-//        }else {
-//            journeyTypeMap.put(cardId,JourneyType.SINGLE);
-//        }
-//    }
-
-//    public Map<String, JourneyType> getJourneyTypeMap() {
-//        return journeyTypeMap;
-//    }
-
     public Station getStation() {
         return station;
     }
     public Integer getTotalDiscountAmountCollected() {
         return totalDiscount;
     }
-
 
     public Integer getTotalAmountCollected() {
         return totalAmountCollected;

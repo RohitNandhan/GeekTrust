@@ -5,7 +5,6 @@ import com.geektrust.backend.dto.MetroSummaryDTO;
 import com.geektrust.backend.entites.*;
 import com.geektrust.backend.repositories.IMetroCardRepository;
 import com.geektrust.backend.repositories.IMetroRepository;
-import com.geektrust.backend.repositories.IMetroStationRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 public class MetroService implements IMetroService{
 
     private final IMetroCardRepository metroCardRepository;
-   // private final IMetroStationRepository metroStationRepository;
     private final IMetroRepository metroRepository;
 
     public MetroService(IMetroCardRepository metroCardRepository, IMetroRepository metroRepository) {
@@ -26,9 +24,10 @@ public class MetroService implements IMetroService{
         PassengerType passengerType = PassengerType.valueOf(passenger);
         Station station = Station.valueOf(fromStation);
         MetroCard metroCard = metroCardRepository.getCardByCardId(cardId);
+
         metroRepository.saveMetro(station, metroCard);
         JourneyType journeyType = metroRepository.getJourneyType(station, cardId);
-        metroRepository.saveMetro(station, metroCard);
+
         int baseAmount = passengerType.getPrice();
         if (journeyType.equals(JourneyType.RETURN)) {
             baseAmount /= 2;
@@ -37,48 +36,37 @@ public class MetroService implements IMetroService{
 
         int totalAmount = calculateTotalAmount(metroCard, baseAmount);
 
-        if (metroCard.getBalance() < totalAmount) {
-            applyInterestAndAddBalance(metroCard, totalAmount);
-        }
-
         metroRepository.addPassenger(station, passengerType);
         metroRepository.setJourneyType(station, cardId);
         metroRepository.addCollectedAmount(station, totalAmount);
         metroCardRepository.deductCardBalance(cardId, totalAmount);
     }
 
+    private double getInterestRate(){
+        double rate=2;
+        return (rate/100);
+    }
+
     private int calculateTotalAmount(MetroCard metroCard, int baseAmount) {
-        if (metroCard.getBalance() >= baseAmount) {
+        int cardBalance=getCardBalance(metroCard);
+        if (cardBalance >= baseAmount) {
             return baseAmount;
         } else {
-            double interestRate = 0.02;
-            int requiredAmount = baseAmount - metroCard.getBalance();
+            double interestRate = getInterestRate();
+            int requiredAmount = baseAmount - cardBalance;
             int additionalAmount = (int) (requiredAmount * interestRate);
-           // metroCard.addBalance(additionalAmount);
-            return baseAmount + additionalAmount;
+            int totalAmount=baseAmount + additionalAmount;
+
+            applyInterestAndAddBalance(metroCard, totalAmount);
+            return totalAmount;
         }
     }
     private void applyInterestAndAddBalance(MetroCard metroCard, int totalAmount) {
-        //double interestRate = 0.02;
-        int requiredAmount = totalAmount - metroCard.getBalance();
-      //  int additionalAmount = (int) (requiredAmount * interestRate);
+        int requiredAmount = totalAmount - getCardBalance(metroCard);
         metroCard.addBalance(requiredAmount);
     }
-//   // @Override
-//    public List<MetroSummaryDTO> printf(){
-//        List<MetroSummaryDTO> metroSummaryDTOList=new ArrayList<>();
-//        metroRepository.getMetrolist().stream().forEach(metro -> {
-//            metroSummaryDTOList.add(new MetroSummaryDTO(
-//                    getMetroStation(metro).getStation().toString(),
-//                    getMetroStation(metro).getTotalAmountCollected(),
-//                    getMetroStation(metro).getTotalDiscountAmountCollected(),
-//                    getMetroStation(metro).getPassengerMap()
-//                    ));
-//        });
-//        return sortListByStation(metroSummaryDTOList);
-//    }
 
-    public MetroStation getMetroStation(Metro metro){
+    private MetroStation getMetroStation(Metro metro){
         return metro.getMetroStation();
     }
 
@@ -86,13 +74,10 @@ public class MetroService implements IMetroService{
         SortMetroSummaryDTOByDSC sortMetroSummaryDTOByDSC = new SortMetroSummaryDTOByDSC();
         Collections.sort(metroSummaryDTOList,sortMetroSummaryDTOByDSC);
         return metroSummaryDTOList;
-//     return metroSummaryDTOList.stream()
-//             .sorted(((o1, o2) ->
-//                     o2.getStation().compareTo(o1.getStation()))).collect(Collectors.toList());
     }
     @Override
     public List<MetroSummaryDTO> printSummary() {
-        List<MetroSummaryDTO> metroSummaryDTOList = metroRepository.getMetrolist()
+        List<MetroSummaryDTO> metroSummaryDTOList = metroRepository.getMetroList()
                 .stream()
                 .map(metro -> createMetroSummaryDTO(metro))
                 .collect(Collectors.toList());
@@ -109,6 +94,9 @@ public class MetroService implements IMetroService{
                 getPassengerMap(metroStation)
         );
     }
+    private Integer getCardBalance(MetroCard metroCard){
+       return metroCard.getBalance();
+    }
     private Integer getTotalDiscount(MetroStation metroStation){
        return metroStation.getTotalDiscountAmountCollected();
     }
@@ -122,15 +110,5 @@ public class MetroService implements IMetroService{
         return metroStation.getPassengerMap();
     }
 
-
-    private List<MetroSummaryDTO> sortListByStation(List<MetroSummaryDTO> summaryList, boolean ascending) {
-    Comparator<MetroSummaryDTO> comparator = ascending ?
-            Comparator.comparing(MetroSummaryDTO::getStation) :
-            (o1, o2) -> o2.getStation().compareTo(o1.getStation());
-
-    return summaryList.stream()
-            .sorted(comparator)
-            .collect(Collectors.toList());
-}
 
 }
